@@ -1,32 +1,33 @@
-
- CREATE TABLE estudiante(
+-- Crear tabla estudiante
+CREATE TABLE estudiante(
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     matricula VARCHAR(100) UNIQUE NOT NULL,
     carrera VARCHAR(100) NOT NULL
- );
+);
 
-  CREATE TABLE libro(
+-- Crear tabla libro
+CREATE TABLE libro(
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(100) NOT NULL,
     autor VARCHAR(100) NOT NULL,
     anio_publicacion INT,
     isbn VARCHAR(100) UNIQUE
- );
+);
 
- CREATE TABLE prestamo(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    estudiante_id BIGINT UNSIGNED NOT NULL,
-    libro_id BIGINT UNSIGNED NOT NULL,
+-- Crear tabla prestamo
+CREATE TABLE prestamo(
+    id SERIAL PRIMARY KEY,
+    estudiante_id INT NOT NULL,
+    libro_id INT NOT NULL,
     fecha_prestamo DATE NOT NULL,
     fecha_devolucion DATE,
     estado VARCHAR(20) NOT NULL,
     FOREIGN KEY (estudiante_id) REFERENCES estudiante(id),
     FOREIGN KEY (libro_id) REFERENCES libro(id)
- );
- 
- 
- -- Insertar estudiantes
+);
+
+-- Insertar estudiantes
 INSERT INTO estudiante (nombre, matricula, carrera) VALUES
 ('Ana Torres', 'A001', 'Ingeniería'),
 ('Luis Gómez', 'A002', 'Derecho'),
@@ -43,15 +44,12 @@ INSERT INTO libro (titulo, autor, anio_publicacion, isbn) VALUES
 ('Rayuela', 'Julio Cortázar', 1963, '978-8437604947');
 
 -- Insertar préstamos
-
 INSERT INTO prestamo (estudiante_id, libro_id, fecha_prestamo, fecha_devolucion, estado) VALUES
 (1, 1, '2025-08-20', NULL, 'activo'),
 (2, 2, '2025-08-15', '2025-08-22', 'devuelto'),
 (3, 3, '2025-08-10', '2025-08-18', 'devuelto'),
 (1, 4, '2025-08-25', NULL, 'activo'),
 (4, 2, '2025-08-26', NULL, 'activo');
-
-
 
 -- 1. Mostrar todos los libros prestados actualmente (estado = 'activo')
 SELECT libro.titulo, estudiante.nombre, prestamo.fecha_prestamo
@@ -74,9 +72,7 @@ GROUP BY estudiante.nombre;
 
 -- 4. Consultar los libros que nunca han sido prestados
 SELECT titulo
-FROM Libro
+FROM libro
 WHERE id NOT IN (
     SELECT libro_id FROM prestamo
 );
-
-
