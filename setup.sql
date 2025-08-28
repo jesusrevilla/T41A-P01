@@ -16,11 +16,13 @@ CREATE TABLE libro (
 
 CREATE TABLE prestamo (
     id SERIAL PRIMARY KEY,
+    estudiante_id INT NOT NULL,
+    libro_id INT NOT NULL,
     fecha_prestamo DATE NOT NULL,
     fecha_devolucion DATE,
     estado VARCHAR(20) NOT NULL,
-    FOREIGN KEY estudiante_id INT REFERENCES estudiante(id) NOT NULL,
-    FOREIGN KEY libro_id INT REFERENCES libro(id)
+    FOREIGN KEY (estudiante_id) REFERENCES estudiante(id),
+    FOREIGN KEY (libro_id) REFERENCES libro(id)
 );
 -- Insertar estudiantes
 INSERT INTO estudiante (nombre, matricula, carrera) VALUES
@@ -70,4 +72,4 @@ SELECT titulo
 FROM Libro
 WHERE id NOT IN (
     SELECT libro_id FROM prestamo
-);
+);                                                       
