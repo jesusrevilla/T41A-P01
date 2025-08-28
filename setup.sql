@@ -1,5 +1,5 @@
 CREATE TABLE libro(
-  libro_id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   titulo VARCHAR(50) NOT NULL, 
   autor VARCHAR(50) NOT NULL, 
   anio_publicacion INT NOT NULL, 
@@ -7,17 +7,19 @@ CREATE TABLE libro(
 );
 
 CREATE TABLE estudiante(
-  estudiante_id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL,
   matricula VARCHAR(10) UNIQUE NOT NULL,
   carrera VARCHAR(30) NOT NULL
 );
 CREATE TABLE prestamo(
-  estudiante_id INT REFERENCES estudiante(estudiante_id) NOT NULL,
-  libro_id INT REFERENCES libro(libro_id) NOT NULL,
+  estudiante_id INT,
+  libro_id INT,
   fecha_prestamo DATE NOT NULL, 
   fecha_devolucion DATE, 
-  estado VARCHAR(8) NOT NULL
+  estado VARCHAR(8) NOT NULL,
+  FOREIGN KEY (estudiante_id) REFERENCES estudiante(id),
+  FOREIGN KEY (libro_id) REFERENCES libro(id)
 );
 -- Insertar estudiantes
 INSERT INTO estudiante (nombre, matricula, carrera) VALUES
@@ -48,25 +50,25 @@ INSERT INTO prestamo (estudiante_id, libro_id, fecha_prestamo, fecha_devolucion,
 -- 1. Mostrar todos los libros prestados actualmente (estado = 'activo')
 SELECT libro.titulo, estudiante.nombre, prestamo.fecha_prestamo
 FROM prestamo
-JOIN libro ON prestamo.libro_id = libro.libro_id
-JOIN estudiante ON prestamo.estudiante_id = estudiante.estudiante_id
+JOIN libro ON prestamo.libro_id = libro.id
+JOIN estudiante ON prestamo.estudiante_id = estudiante.id
 WHERE prestamo.estado = 'activo';
 
 -- 2. Listar los estudiantes que han devuelto al menos un libro
 SELECT DISTINCT estudiante.nombre
 FROM prestamo
-JOIN estudiante ON prestamo.estudiante_id = estudiante.estudiante_id
+JOIN estudiante ON prestamo.estudiante_id = estudiante.id
 WHERE prestamo.estado = 'devuelto';
 
 -- 3. Mostrar cuántos libros ha prestado cada estudiante
 SELECT estudiante.nombre, COUNT(*) AS total_prestamos
 FROM prestamo
-JOIN estudiante ON prestamo.estudiante_id = estudiante.estudiante_id
+JOIN estudiante ON prestamo.estudiante_id = estudiante.id
 GROUP BY estudiante.nombre;
 
 -- 4. Consultar los libros que nunca han sido prestados
 SELECT titulo
-FROM libro
-WHERE libro_id NOT IN (
+FROM Libro
+WHERE id NOT IN (
     SELECT libro_id FROM prestamo
 );
