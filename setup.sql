@@ -20,6 +20,8 @@ CREATE TABLE PRESTAMO(
   fecha_prestamo TIMESTAMP NOT NULL,
   fecha_devolucion TIMESTAMP,
   estado VARCHAR(20) NOT NULL
+  foreign KEY (estudiante_id) REFERENCES estudiante(id), 
+  foreign KEY (libro_id) REFERENCES LIBRO(id)
 ); 
 
 -- Insertar estudiantes
