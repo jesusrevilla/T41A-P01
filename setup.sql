@@ -19,8 +19,8 @@ CREATE TABLE prestamo (
     fecha_prestamo DATE NOT NULL,
     fecha_devolucion DATE,
     estado VARCHAR(20) NOT NULL,
-    estudiante_id INT REFERENCES estudiante(id) NOT NULL,
-    libro_id INT REFERENCES libro(id)
+    FOREIGN KEY estudiante_id INT REFERENCES estudiante(id) NOT NULL,
+    FOREIGN KEY libro_id INT REFERENCES libro(id)
 );
 -- Insertar estudiantes
 INSERT INTO estudiante (nombre, matricula, carrera) VALUES
