@@ -23,13 +23,16 @@ CREATE TABLE prestamo (
   fecha_prestamo DATE NOT NULL,
   fecha_devolucion DATE,
   estado VARCHAR(10) CHECK (estado IN ('activo', 'devuelto')) NOT NULL,
-  -- estado BOOLEAN
-  CONSTRAINT fk_estudiante FOREIGN KEY (id_estudiante)
-    REFERENCES estudiante (id_estudiante)
-    ON DELETE CASCADE,
-  CONSTRAINT fk_libro FOREIGN KEY (id_libro)
-    REFERENCES libro (id_libro)
-    ON DELETE CASCADE
+    -- estado BOOLEAN
+  FOREIGN KEY (id_estudiante) REFERENCES estudiante(id_estudiante),
+  FOREIGN KEY (id_libro) REFERENCES libro(id_libro)
+
+  -- CONSTRAINT fk_estudiante FOREIGN KEY (id_estudiante)
+    -- REFERENCES estudiante (id_estudiante)
+    -- ON DELETE CASCADE,
+  -- CONSTRAINT fk_libro FOREIGN KEY (id_libro)
+    -- REFERENCES libro (id_libro)
+    -- ON DELETE CASCADE
 );
 
 -- Insertar estudiantes
