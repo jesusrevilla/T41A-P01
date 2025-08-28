@@ -1,32 +1,27 @@
--- Crear una tabla de estudiantes
-CREATE TABLE estudiante (
-  id SERIAL PRIMARY KEY,
-  nombre VARCHAR(30) NOT NULL,
-  matricula VARCHAR(4) NOT NULL,
-  carrera VARCHAR(30) NOT NULL
+CREATE TABLE estudiante(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    matricula VARCHAR(100) UNIQUE NOT NULL,
+    carrera VARCHAR(100) NOT NULL
 );
-
--- Crear una tabla de libro
-CREATE TABLE libro (
-  id SERIAL PRIMARY KEY,
-  titulo VARCHAR(30) NOT NULL,
-  autor VARCHAR(30) NOT NULL,
-  anio_publicacion BIGINT NOT NULL,
-  isbn VARCHAR(14) NOT NULL
+  CREATE TABLE libro(
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(100) NOT NULL,
+    autor VARCHAR(100) NOT NULL,
+    anio_publicacion INT,
+    isbn VARCHAR(100) UNIQUE
 );
-
--- Crear una tabla de préstamos
-CREATE TABLE prestamo (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  estudiante_id BIGINT UNSIGNED NOT NULL,
-  libro_id BIGINT UNSIGNED NOT NULL,
-  fecha_prestamo DATE NOT NULL,
-  fecha_devolucion DATE,
-  estado VARCHAR(30) NOT NULL,
-  FOREIGN KEY (estudiante_id) REFERENCES estudiante(id),
-  FOREIGN KEY (libro_id) REFERENCES libro(id)
+CREATE TABLE prestamo(
+    id SERIAL PRIMARY KEY,
+    estudiante_id INT NOT NULL,
+    libro_id INT NOT NULL,
+    fecha_prestamo DATE NOT NULL,
+    fecha_devolucion DATE,
+    estado VARCHAR(20) NOT NULL,
+    FOREIGN KEY (estudiante_id) REFERENCES estudiante(id),
+    FOREIGN KEY (libro_id) REFERENCES libro(id)
 );
-
+ 
 -- Insertar estudiantes
 INSERT INTO estudiante (nombre, matricula, carrera) VALUES
 ('Ana Torres', 'A001', 'Ingeniería'),
@@ -34,7 +29,6 @@ INSERT INTO estudiante (nombre, matricula, carrera) VALUES
 ('María López', 'A003', 'Medicina'),
 ('Carlos Ruiz', 'A004', 'Arquitectura'),
 ('Sofía Méndez', 'A005', 'Psicología');
-
 -- Insertar libros
 INSERT INTO libro (titulo, autor, anio_publicacion, isbn) VALUES
 ('Cien años de soledad', 'Gabriel García Márquez', 1967, '978-0307474728'),
@@ -42,7 +36,6 @@ INSERT INTO libro (titulo, autor, anio_publicacion, isbn) VALUES
 ('1984', 'George Orwell', 1949, '978-0451524935'),
 ('La Odisea', 'Homero', -800, '978-0140268867'),
 ('Rayuela', 'Julio Cortázar', 1963, '978-8437604947');
-
 -- Insertar préstamos
 INSERT INTO prestamo (estudiante_id, libro_id, fecha_prestamo, fecha_devolucion, estado) VALUES
 (1, 1, '2025-08-20', NULL, 'activo'),
@@ -57,19 +50,16 @@ FROM prestamo
 JOIN libro ON prestamo.libro_id = libro.id
 JOIN estudiante ON prestamo.estudiante_id = estudiante.id
 WHERE prestamo.estado = 'activo';
-
 -- 2. Listar los estudiantes que han devuelto al menos un libro
 SELECT DISTINCT estudiante.nombre
 FROM prestamo
 JOIN estudiante ON prestamo.estudiante_id = estudiante.id
 WHERE prestamo.estado = 'devuelto';
-
 -- 3. Mostrar cuántos libros ha prestado cada estudiante
 SELECT estudiante.nombre, COUNT(*) AS total_prestamos
 FROM prestamo
 JOIN estudiante ON prestamo.estudiante_id = estudiante.id
 GROUP BY estudiante.nombre;
-
 -- 4. Consultar los libros que nunca han sido prestados
 SELECT titulo
 FROM Libro
